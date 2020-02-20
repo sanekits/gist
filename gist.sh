@@ -27,7 +27,7 @@ function format_file_as_JSON_string() {
 
 # Check all the flags, have plans to add in a verbose and quiet flag, but not yet
 while getopts "n:u:d:p" flag; do
-    case ${flag} in	    
+    case ${flag} in
 	n)
             # We expect the user to provide his own newlines, but we can escape
             # double-quotes for him
@@ -38,7 +38,7 @@ while getopts "n:u:d:p" flag; do
 	    ;;
 	d)
             # Again escaping double-quotes
-            # Description variable also includes the JSON syntax of 
+            # Description variable also includes the JSON syntax of
             # "description": "argument" so that if a description is not specified
             # we can still send the gist
 	    DESCRIPTION="\"description\": \"$(echo ${OPTARG} | awk '{gsub(/"/, "\\\"")} 1')\", "
@@ -49,7 +49,7 @@ while getopts "n:u:d:p" flag; do
 	*)
 	    exit 1
 	    ;;
-	    
+
     esac
 done
 
@@ -57,15 +57,15 @@ done
 shift $((OPTIND - 1))
 if [ $# -eq 0 ]; then
     cat <<EOF
-    
+
     usage:  gist [-options] arg1
-    
+
     options:
         -n   Specify the name of your gist
         -u   Specify the user (default is anonymous)
         -d   Specify a description for your gist
         -p   Specify the creation of a private (aka "secret" gist.
-    
+
     Report bugs to: farhank@stanford.edu
     pkg home page:  <https://github.com/kathawala/gist/blob/master/gist.sh>
 EOF
@@ -77,7 +77,7 @@ fi
 # the file given into valid JSON.
 FILE=${1}
 # Here we treat the argument as a file on the local system
-if [ -f "${FILE}" ]; then
+if [ -f "${FILE}" ] || [ -p "${FILE}" ]; then
     if [ -z "${FILENAME}" ]; then
 	# Strip everything but the filename (/usr/test.txt -> test.txt)
 	FILENAME="\"$(basename "${FILE}")\""
@@ -97,7 +97,7 @@ else
     echo "${FILE} does not exist. Please specify an existing filename"
     exit 1
 fi
-						     
+
 # This is the formatting of the JSON request as per the Github Gist API
 #{
 #  "description": "the description for this gist",
